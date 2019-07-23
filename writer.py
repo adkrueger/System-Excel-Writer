@@ -108,6 +108,7 @@ def add_means(row_num, data_types, num_sheets, write_sheet, dt_keys):
 
 
 def add_avg_means(write_sheet, num_sheets, data_types, dt_keys, date_range, chart_sheet):
+    offset = 0  # needed for charts; makes for smoother formatting
     for data_key in dt_keys[2:]:
         if data_key.upper() != 'COMMENTS' and data_key.upper() != 'COMMENT':
             col_num = data_types[data_key] - 3
@@ -136,10 +137,11 @@ def add_avg_means(write_sheet, num_sheets, data_types, dt_keys, date_range, char
                 write_sheet.cell(row=date_range+2, column=mean_col).font = Font(bold=True)
                 write_sheet.cell(row=date_range+2, column=avg_col).value = statistics.pstdev(all_means)
 
-            add_charts(chart_sheet, data_key, mean_col, avg_col, write_sheet, date_range, data_types)
+            offset = add_chart(chart_sheet, data_key, mean_col, avg_col, write_sheet, date_range, data_types,
+                               col_num % 2, offset)
 
 
-def add_charts(chart_sheet, data_key, mean_col, avg_col, write_sheet, date_range, data_types):
+def add_chart(chart_sheet, data_key, mean_col, avg_col, write_sheet, date_range, data_types, col_choice, offset):
     c = LineChart()
     c.display_blanks = 'span'
     c.title = data_key.upper()
@@ -156,7 +158,13 @@ def add_charts(chart_sheet, data_key, mean_col, avg_col, write_sheet, date_range
     dates = Reference(write_sheet, min_col=1, max_col=1, min_row=2, max_row=date_range + 1)
     c.set_categories(dates)
 
-    chart_sheet.add_chart(c, 'A' + str(15 * (data_types[data_key] - 3) + 1))
+    # Add to either col A or col J
+    if not col_choice:
+        chart_sheet.add_chart(c, 'A' + str(15 * (data_types[data_key] - 3) + 1 - offset*14))
+    else:
+        chart_sheet.add_chart(c, 'J' + str(15 * (data_types[data_key] - 4) + 1 - offset*14))
+        offset += 1
+    return offset
 
 
 def transfer_data(doc_wb, write_wb, sheet_name, num_sheets, wb_dir, year):

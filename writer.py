@@ -1,6 +1,8 @@
 import os
 import openpyxl
 import statistics
+import tkinter
+from tkinter import filedialog
 from datetime import datetime
 from openpyxl.chart import LineChart, Reference
 from openpyxl.chart.axis import DateAxis
@@ -191,11 +193,45 @@ def transfer_data(doc_wb, write_wb, sheet_name, num_sheets, wb_dir, year):
     write_wb.save('writebook.xlsx')
 
 
+def find_similar_sheet_names(sheet_names):
+    possible_names = {}
+    for sheet_index in range(len(sheet_names)-1):
+        if is_number(sheet_names[sheet_index][-1]):
+            curr_title = sheet_names[sheet_index][:-1]
+            try:  # if we've seen a title like this, increase the count by 1
+                possible_names[curr_title] += 1
+            except KeyError:  # otherwise, add a new key
+                possible_names[curr_title] = 1
+    return possible_names
+
+
 def run():
-    os.chdir('c:\\Users\\aakru\\Downloads')
-    doc1 = openpyxl.load_workbook('file 1 user input values waterqual.xlsx')
+    root = tkinter.Tk()
+    root.withdraw()
+    file_path = filedialog.askopenfilename()  # ask for file to compile from
+    file_path_split = file_path.split('/')
+    doc_title = file_path_split.pop(len(file_path_split)-1)  # get title and shorten to folder directory
+    file_path = '\\'.join(file_path_split)
+    os.chdir(file_path)
+    doc1 = openpyxl.load_workbook(doc_title)  # now actually load the workbook
+    os.chdir(file_path)
+    poss_sheet_names = find_similar_sheet_names(doc1.sheetnames)
+    count = 1
+    print('Options (enter number corresponding to desired sheet)')
+    for sheet_name in poss_sheet_names.keys():
+        print(str(count) + ': ' + sheet_name)
+        count += 1
+    choice = input('Input choice here: ')
+    while not is_number(choice):
+        choice = input('Choice must be a number, please input again: ')
+    while int(choice) not in range(1, len(poss_sheet_names.keys())+1):
+        choice = input('Choice must be within range: ')
+    year = input('What year would you like to compile? (NOTE: error will occur if year not found in sheet) ')
+    while not is_number(year):
+        year = input('Year must be a number, please input again: ')
+    sheet_title = list(poss_sheet_names.keys())[int(choice)-1]
     write_book = openpyxl.Workbook()
-    transfer_data(doc1, write_book, 'KARP SYS', 6, 'c:\\Users\\aakru\\Downloads', 2018)
+    transfer_data(doc1, write_book, sheet_title, poss_sheet_names[sheet_title], file_path, int(year))
 
 
 run()

@@ -1,8 +1,8 @@
 import os
 import openpyxl
 import statistics
-import tkinter
-from tkinter import filedialog
+import tkinter as tk
+from tkinter import filedialog, StringVar
 from datetime import datetime
 from openpyxl.chart import LineChart, Reference
 from openpyxl.chart.axis import DateAxis
@@ -195,6 +195,7 @@ def transfer_data(doc_wb, write_wb, sheet_name, num_sheets, wb_dir, year):
 
 def find_similar_sheet_names(sheet_names):
     possible_names = {}
+    # essentially find all sheets that end in a number and have the same "title" format
     for sheet_index in range(len(sheet_names)-1):
         if is_number(sheet_names[sheet_index][-1]):
             curr_title = sheet_names[sheet_index][:-1]
@@ -206,18 +207,24 @@ def find_similar_sheet_names(sheet_names):
 
 
 def run():
-    root = tkinter.Tk()
-    root.withdraw()
-    file_path = filedialog.askopenfilename()  # ask for file to compile from
+    root = tk.Tk()
+    file_path = StringVar()
+    file_button = tk.Button(root, text='Select File', width=20,
+                            command=(lambda: file_path.set(filedialog.askopenfilename())))
+    file_button.pack(side='top')
+    exit_button = tk.Button(root, text='Exit', width=20, command=(lambda: root.destroy()))
+    exit_button.pack(side='bottom')
+    root.mainloop()
+    file_path = file_path.get()
     file_path_split = file_path.split('/')
     doc_title = file_path_split.pop(len(file_path_split)-1)  # get title and shorten to folder directory
     file_path = '\\'.join(file_path_split)
     os.chdir(file_path)
     doc1 = openpyxl.load_workbook(doc_title)  # now actually load the workbook
-    os.chdir(file_path)
     poss_sheet_names = find_similar_sheet_names(doc1.sheetnames)
     count = 1
     print('Options (enter number corresponding to desired sheet)')
+    print('NOTE: Sheets must end in a number, starting at 1')
     for sheet_name in poss_sheet_names.keys():
         print(str(count) + ': ' + sheet_name)
         count += 1
@@ -226,11 +233,13 @@ def run():
         choice = input('Choice must be a number, please input again: ')
     while int(choice) not in range(1, len(poss_sheet_names.keys())+1):
         choice = input('Choice must be within range: ')
-    year = input('What year would you like to compile? (NOTE: error will occur if year not found in sheet) ')
+    print('What year would you like to compile?')
+    year = input('(NOTE: error will occur if year not found in date column of sheet)')
     while not is_number(year):
         year = input('Year must be a number, please input again: ')
     sheet_title = list(poss_sheet_names.keys())[int(choice)-1]
     write_book = openpyxl.Workbook()
+    print('Processing')
     transfer_data(doc1, write_book, sheet_title, poss_sheet_names[sheet_title], file_path, int(year))
 
 

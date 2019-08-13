@@ -248,22 +248,39 @@ def run():
                             command=lambda: choice_root.destroy())
     next_button.pack()
     choice_root.mainloop()
-    choice = choice.get()
 
     '''choice = input('Input choice here: ')
     while not is_number(choice):
         choice = input('Choice must be a number, please input again: ')
     while int(choice) not in range(1, len(poss_sheet_names.keys())+1):
         choice = input('Choice must be within range: ')'''
-    
-    print('What year would you like to compile?')
+
+    year_root = tk.Tk()
+    year_label = tk.Label(year_root, text='Please input a year below.\nNOTE: Year must be in range; '
+                                          'otherwise, error will occur\n')
+    year_label.pack()
+    now = datetime.now()
+    year_sb = tk.Spinbox(year_root, from_=2000, to=int(now.year)+1)
+    year_sb.pack()
+    year = tk.IntVar()
+    year_select = tk.Button(year_root, text='Select',
+                            command=lambda: year.set(year_sb.get()))
+    year_select.pack()
+    compile_button = tk.Button(year_root, text='Compile',
+                               command=lambda: year_root.destroy())
+    compile_button.pack()
+    year_root.mainloop()
+    '''print('What year would you like to compile?')
     year = input('(NOTE: error will occur if year not found in date column of sheet)')
     while not is_number(year):
-        year = input('Year must be a number, please input again: ')
-    sheet_title = list(poss_sheet_names.keys())[int(choice)]
+        year = input('Year must be a number, please input again: ')'''
+
+    choice = choice.get()
+    sheet_title = list(poss_sheet_names.keys())[choice]
     write_book = openpyxl.Workbook()
     print('Processing')
-    transfer_data(doc1, write_book, sheet_title, poss_sheet_names[sheet_title], file_path, int(year))
+    year = year.get()
+    transfer_data(doc1, write_book, sheet_title, poss_sheet_names[sheet_title], file_path, year)
 
 
 run()

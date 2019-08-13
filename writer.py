@@ -217,8 +217,8 @@ def run():
     file_button = tk.Button(root, text='Select File', width=20,
                             command=(lambda: file_path.set(filedialog.askopenfilename())))
     file_button.place(relx=0.2, rely=0.3)
-    exit_button = tk.Button(root, text='Exit', width=20, command=(lambda: root.destroy()))
-    exit_button.place(relx=0.2, rely=0.6)
+    next_button = tk.Button(root, text='Next', width=20, command=lambda: root.destroy())
+    next_button.place(relx=0.2, rely=0.6)
     root.mainloop()
 
     file_path = file_path.get()
@@ -228,7 +228,12 @@ def run():
     os.chdir(file_path)
     doc1 = openpyxl.load_workbook(doc_title)  # now actually load the workbook
 
+    # give the user a list of sheet names to choose from
     choice_root = tk.Tk()
+    choice_text = tk.Label(choice_root, text='Click on a choice below, click "Select", then click "Next".\n\n'
+                                             'NOTE:  If expected system is not found on this sheet, make sure you have '
+                                             '\nit listed in proper format, i.e. "KARP SYS1" through "KARP SYS6".\n')
+    choice_text.pack()
     choice_list = tk.Listbox(choice_root)
     poss_sheet_names = find_similar_sheet_names(doc1.sheetnames)
     count = 1
@@ -239,36 +244,53 @@ def run():
     choice_frame = tk.Frame(choice_root, width=175)
     choice_frame.pack()
     choice = tk.IntVar()
-    select = tk.Button(choice_root, text='Select',
+    newline = tk.Label(choice_root, text='')
+    newline.pack()
+    select = tk.Button(choice_root, text='Select', width=10,
                        command=lambda: choice.set(choice_list.curselection()[0]))
     select.pack()
-    next_button = tk.Button(choice_root, text='Next',
+    next_button = tk.Button(choice_root, text='Next', width=10,
                             command=lambda: choice_root.destroy())
     next_button.pack()
     choice_root.mainloop()
 
+    # give the user a year selection spinbox
     year_root = tk.Tk()
     year_label = tk.Label(year_root, text='Please input a year below.\nNOTE: Year must be in range; '
-                                          'otherwise, error will occur\n')
+                                          'otherwise, error will occur. \n')
     year_label.pack()
     now = datetime.now()
-    year_sb = tk.Spinbox(year_root, from_=2000, to=int(now.year)+1)
+    year_sb = tk.Spinbox(year_root, from_=int(now.year)-1, to=5000)
     year_sb.pack()
+    newline = tk.Label(year_root, text='')
+    newline.pack()
     year = tk.IntVar()
-    year_select = tk.Button(year_root, text='Select',
+    year_select = tk.Button(year_root, text='Select', width=13,
                             command=lambda: year.set(year_sb.get()))
     year_select.pack()
-    compile_button = tk.Button(year_root, text='Compile',
+    compile_button = tk.Button(year_root, text='Compile', width=13,
                                command=lambda: year_root.destroy())
     compile_button.pack()
     year_root.mainloop()
 
+    # run the compilation function
     choice = choice.get()
     sheet_title = list(poss_sheet_names.keys())[choice]
     write_book = openpyxl.Workbook()
-    print('Processing')
     year = year.get()
     transfer_data(doc1, write_book, sheet_title, poss_sheet_names[sheet_title], file_path, year)
+
+    # print a final message to let the user know the program has finished
+    final = tk.Tk()
+    final_text = tk.Label(final, text='Done!\n\nPlease check in the same directory as the original sheet for the final '
+                          'product, denoted "writebook.xlsx".\nFeel free to edit the document as necessary.')
+    final_text.pack()
+    note_text = tk.Label(final, text='\nOriginal directory: ' + file_path + '\n')
+    note_text.pack()
+    exit_button = tk.Button(final, text='Exit', width=10,
+                            command=lambda: final.destroy())
+    exit_button.pack()
+    final.mainloop()
 
 
 run()

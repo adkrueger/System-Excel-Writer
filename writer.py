@@ -2,7 +2,7 @@ import os
 import openpyxl
 import statistics
 import tkinter as tk
-from tkinter import filedialog, StringVar
+from tkinter import filedialog
 from datetime import datetime
 from openpyxl.chart import LineChart, Reference
 from openpyxl.chart.axis import DateAxis
@@ -208,36 +208,59 @@ def find_similar_sheet_names(sheet_names):
 
 def run():
     root = tk.Tk()
-    file_path = StringVar()
+    frame = tk.Frame(root, width=250, height=180)
+    frame.pack()
+    message = tk.Label(root, height=0, text='Please select the file you want to be compiled,\n'
+                                            'then hit "Exit" when you\'re done.')
+    message.place(relx=0, rely=0)
+    file_path = tk.StringVar()
     file_button = tk.Button(root, text='Select File', width=20,
                             command=(lambda: file_path.set(filedialog.askopenfilename())))
-    file_button.pack(side='top')
+    file_button.place(relx=0.2, rely=0.3)
     exit_button = tk.Button(root, text='Exit', width=20, command=(lambda: root.destroy()))
-    exit_button.pack(side='bottom')
+    exit_button.place(relx=0.2, rely=0.6)
     root.mainloop()
+
     file_path = file_path.get()
     file_path_split = file_path.split('/')
     doc_title = file_path_split.pop(len(file_path_split)-1)  # get title and shorten to folder directory
     file_path = '\\'.join(file_path_split)
     os.chdir(file_path)
     doc1 = openpyxl.load_workbook(doc_title)  # now actually load the workbook
+
+    choice_root = tk.Tk()
+    choice_list = tk.Listbox(choice_root)
     poss_sheet_names = find_similar_sheet_names(doc1.sheetnames)
     count = 1
-    print('Options (enter number corresponding to desired sheet)')
-    print('NOTE: Sheets must end in a number, starting at 1')
+    '''print('Options (enter number corresponding to desired sheet)')
+    print('NOTE: Sheets must end in a number, starting at 1')'''
     for sheet_name in poss_sheet_names.keys():
-        print(str(count) + ': ' + sheet_name)
+        choice_list.insert(count, sheet_name)
         count += 1
-    choice = input('Input choice here: ')
+    choice_list.pack()
+    choice_frame = tk.Frame(choice_root, width=175)
+    choice_frame.pack()
+    choice = tk.IntVar()
+    select = tk.Button(choice_root, text='Select',
+                       command=lambda: choice.set(choice_list.curselection()[0]))
+    select.pack()
+    next_button = tk.Button(choice_root, text='Next',
+                            command=lambda: choice_root.destroy())
+    next_button.pack()
+    choice_root.mainloop()
+    choice = choice.get()
+
+    '''choice = input('Input choice here: ')
     while not is_number(choice):
         choice = input('Choice must be a number, please input again: ')
     while int(choice) not in range(1, len(poss_sheet_names.keys())+1):
-        choice = input('Choice must be within range: ')
+        choice = input('Choice must be within range: ')'''
+    
     print('What year would you like to compile?')
     year = input('(NOTE: error will occur if year not found in date column of sheet)')
     while not is_number(year):
         year = input('Year must be a number, please input again: ')
-    sheet_title = list(poss_sheet_names.keys())[int(choice)-1]
+    sheet_title = list(poss_sheet_names.keys())[int(choice)]
     write_book = openpyxl.Workbook()
     print('Processing')
     transfer_data(doc1, write_book, sheet_title, poss_sheet_names[sheet_title], file_path, int(year))

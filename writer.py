@@ -232,8 +232,6 @@ def run():
     choice_list = tk.Listbox(choice_root)
     poss_sheet_names = find_similar_sheet_names(doc1.sheetnames)
     count = 1
-    '''print('Options (enter number corresponding to desired sheet)')
-    print('NOTE: Sheets must end in a number, starting at 1')'''
     for sheet_name in poss_sheet_names.keys():
         choice_list.insert(count, sheet_name)
         count += 1
@@ -248,12 +246,6 @@ def run():
                             command=lambda: choice_root.destroy())
     next_button.pack()
     choice_root.mainloop()
-
-    '''choice = input('Input choice here: ')
-    while not is_number(choice):
-        choice = input('Choice must be a number, please input again: ')
-    while int(choice) not in range(1, len(poss_sheet_names.keys())+1):
-        choice = input('Choice must be within range: ')'''
 
     year_root = tk.Tk()
     year_label = tk.Label(year_root, text='Please input a year below.\nNOTE: Year must be in range; '
@@ -270,10 +262,6 @@ def run():
                                command=lambda: year_root.destroy())
     compile_button.pack()
     year_root.mainloop()
-    '''print('What year would you like to compile?')
-    year = input('(NOTE: error will occur if year not found in date column of sheet)')
-    while not is_number(year):
-        year = input('Year must be a number, please input again: ')'''
 
     choice = choice.get()
     sheet_title = list(poss_sheet_names.keys())[choice]

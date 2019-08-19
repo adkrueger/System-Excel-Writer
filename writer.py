@@ -58,9 +58,13 @@ def add_dates(start_end, write_sheet, date_range, doc_sheet, bold):
     write_sheet['B1'].value = 'DAY'
     write_sheet['B1'].font = bold
     for i in range(date_range):  # number of readings in a year
-        curr_date = doc_sheet['A' + str(i + start)].value.strftime('%m/%d/%Y').lstrip('0').replace('/0', '/')
-        write_sheet['A' + str(i + 2)].value = datetime.strptime(curr_date, '%m/%d/%Y').date()
-        write_sheet['B' + str(i + 2)].value = doc_sheet['B' + str(i + start)].value
+        try:
+            print(doc_sheet['A' + str(i + start)].value)
+            curr_date = doc_sheet['A' + str(i + start)].value.strftime('%m/%d/%Y').lstrip('0').replace('/0', '/')
+            write_sheet['A' + str(i + 2)].value = datetime.strptime(curr_date, '%m/%d/%Y').date()
+            write_sheet['B' + str(i + 2)].value = doc_sheet['B' + str(i + start)].value
+        except AttributeError:
+            pass
 
 
 def compile_data_to_sheet(write_sheet, sheet_num, sheet_name, num_sheets, doc_wb, year, data_types):
@@ -224,8 +228,12 @@ def run():
     file_path = file_path.get()
     file_path_split = file_path.split('/')
     doc_title = file_path_split.pop(len(file_path_split)-1)  # get title and shorten to folder directory
-    file_path = '\\'.join(file_path_split)
-    os.chdir(file_path)
+    try:
+        file_path = '\\'.join(file_path_split)
+        os.chdir(file_path)
+    except OSError:  # mac or linux users use '/' instead of '\' in directories
+        file_path = '/'.join(file_path_split)
+        os.chdir(file_path)
     doc1 = openpyxl.load_workbook(doc_title)  # now actually load the workbook
 
     # give the user a list of sheet names to choose from

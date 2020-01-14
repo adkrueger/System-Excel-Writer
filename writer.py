@@ -58,7 +58,7 @@ def add_dates(start_end, write_sheet, date_range, doc_sheet, bold):
     write_sheet['B1'].value = 'DAY'
     write_sheet['B1'].font = bold
     for i in range(date_range):  # number of readings in a year
-        print(doc_sheet['A' + str(i + start)].value)
+        #print(doc_sheet['A' + str(i + start)].value)
         curr_date = doc_sheet['A' + str(i + start)].value.strftime('%m/%d/%Y').lstrip('0').replace('/0', '/')
         write_sheet['A' + str(i + 2)].value = datetime.strptime(curr_date, '%m/%d/%Y').date()
         write_sheet['B' + str(i + 2)].value = doc_sheet['B' + str(i + start)].value
@@ -265,7 +265,7 @@ def run():
                                           'otherwise, error will occur. \n')
     year_label.pack()
     now = datetime.now()
-    year_sb = tk.Spinbox(year_root, from_=int(now.year)-1, to=5000)
+    year_sb = tk.Spinbox(year_root, from_=int(now.year)-10, to=5000)
     year_sb.pack()
     newline = tk.Label(year_root, text='')
     newline.pack()

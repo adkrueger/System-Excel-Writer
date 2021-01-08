@@ -67,6 +67,7 @@ def add_dates(start_end, write_sheet, date_range, doc_sheet, bold):
 def compile_data_to_sheet(write_sheet, sheet_num, sheet_name, num_sheets, doc_wb, year, data_types):
     bold = Font(bold=True)
     dt_keys = list(data_types.keys())
+
     doc_sheet = doc_wb[sheet_name + str(sheet_num)]  # i.e. KARP SYSTEM1
     start_end = find_start_end(doc_sheet, year)
     date_range = start_end[1] - start_end[0] + 1
@@ -182,7 +183,10 @@ def transfer_data(doc_wb, write_wb, sheet_name, num_sheets, wb_dir, year):
 
     # compile all data to the sheet and set date_range
     for sheet_num in range(1, num_sheets+1):
-        date_range = compile_data_to_sheet(write_sheet, sheet_num, sheet_name, num_sheets, doc_wb, year, data_types)
+        try:
+            date_range = compile_data_to_sheet(write_sheet, sheet_num, sheet_name, num_sheets, doc_wb, year, data_types)
+        except KeyError: # case where a sheet isn't in the sequence
+            pass
 
     # now to find the mean of all readings
     for row_num in range(2, date_range+2):  # get the proper row numbers

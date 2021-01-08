@@ -1,6 +1,7 @@
 #SYSTEM EXCEL WRITER
 Author: Aaron Krueger
-Date: 8/19/2019
+Publication Date: 8/19/2019
+Update Date: 1/8/2021
 
 
 This application was made by Aaron Krueger for use at Boston Children's Hospital to aid in the research and compilation
@@ -48,27 +49,19 @@ menu that appears, click 'Run Module'.
 If the above instructions didn't work, follow the OS-specific instructions below.
 
 **WINDOWS**:
-Open Notepad and type something like the following:
-@echo off
-"path where your python.exe is stored" "path where writer.py is stored"
-pause
-
-(Mine looks like the following. You may need to enable hidden items to see AppData in File Explorer by opening File Explorer,
-clicking "View" on the menu, then checking "Hidden Items" box in the "Show/hide" area.
-@echo off
-C:\Users\aakru\AppData\Local\Programs\Python\Python37-32\python.exe C:\Users\aakru\Downloads\System-Excel-Writer-master\System-Excel-Writer-master\writer.py
-pause
-)
-After this, save the file and change the file extension to .bat
-You should be able to double click the .bat folder, which will open the Command Prompt window and subsequently a window
-containing instructions on how to operate the program.
+Using Command Prompt (type "cmd" in the search bar and click on Command Prompt), type in the following:
+python "path where writer.py is stored"
+i.e.
+python C:\Users\user\Downloads\System-Excel-Writer-master\writer.py
+alternatively, use the "cd" command to navigate to the same directory as writer.py (https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/cd), and type:
+python ./writer.py
 
 
 **MAC OS**:
 Open Terminal (i.e. Command+Spacebar, then type "Terminal" and click on the program) and type something like the following:
 python3 "path where writer.py is stored"
 i.e.
-python3 C:\Users\aakru\Downloads\System-Excel-Writer-master\System-Excel-Writer-master\writer.py
+python3 C:/Users/user/Downloads/System-Excel-Writer-master/writer.py
 *or*
 python3 ./writer.py                 <-- note that this only works if your terminal is in the same directory as writer.py
 This will run the program, where a window will pop up with instructions on how to run the program.
@@ -83,10 +76,28 @@ Type "./writer.py" and the program will run
 6. Follow the instructions given in the program to compile the spreadsheet.
 
 
+#NOTES:
+The initial spreadsheet should follow a certain "expected format"
+    Column A should have dates in "MM/DD/YYYY" or similar format
+    Column B should have individual days for each date (i.e. Monday, Tuesday, etc.)
+    Columns with actual data need to have the data type listed above the numbers (i.e. pH or Alkalinity)
+    See Troubleshooting concern #2 for information on system/sheet titling
+
+If a word is written instead of actual data or the cell is left blank, the program will ignore it when calculating means.
+    However, the program can't discern whether or not a number is too high or too low, so make sure numbers are input
+    properly and without error.
+
+Data can be edited freely after successful compilation.
+
+The program *will* overwrite any excel files in the current directory with the name "writebook"
+    This includes past years' compilations!
+    To disregard this, simply move the other "writebook" to another directory.
+
+The program will not save properly if "writebook" is already open on the computer.
 
 
 
-TROUBLESHOOTING:
+#TROUBLESHOOTING:
 I clicked the "X" button and the program stopped, what should I do?
     Run the program again and make sure you only use the "Exit" button given at the end of the program.
     (Exiting the program preemptively won't cause any harm, you'll just need to start all over)
@@ -121,24 +132,3 @@ An error occurs when using the most up to date year
 
 I can't use the arrows on the year selection to go below a certain year
     Try typing in the date, then hit 'Select' and 'Compile.'
-
-
-
-NOTES:
-The initial spreadsheet should follow a certain "expected format"
-    Column A should have dates in "MM/DD/YYYY" or similar format
-    Column B should have individual days for each date (i.e. Monday, Tuesday, etc.)
-    Columns with actual data need to have the data type listed above the numbers (i.e. pH or Alkalinity)
-    See Troubleshooting concern #2 for information on system/sheet titling
-
-If a word is written instead of actual data or the cell is left blank, the program will ignore it when calculating means.
-    However, the program can't discern whether or not a number is too high or too low, so make sure numbers are input
-    properly and without error.
-
-Data can be edited freely after successful compilation.
-
-The program *will* overwrite any excel files in the current directory with the name "writebook"
-    This includes past years' compilations!
-    To disregard this, simply move the other "writebook" to another directory.
-
-The program will not save properly if "writebook" is already open on the computer.

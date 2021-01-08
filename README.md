@@ -1,4 +1,4 @@
-SYSTEM EXCEL WRITER
+#SYSTEM EXCEL WRITER
 Author: Aaron Krueger
 Date: 8/19/2019
 
@@ -9,15 +9,18 @@ this data in a clean and concise fashion onto another spreadsheet.
 
 
 
-USAGE
+#**USAGE**
 
-1. First step is to make sure you've downloaded Python 3.x. There are many versions of Python 3 to download, but this
+*Note*: skip steps 1-3 if you've already downloaded python, pip, and the openpyxl library. step 4 can be skipped if there 
+    are no updates to the program
+
+**1.** First step is to make sure you've downloaded Python 3.x. There are many versions of Python 3 to download, but this
 program was written in Python 3.7.3. To download the most recent version of Python, go to the following link:
         https://www.python.org/downloads/
 After this, run the exe file (found where you downloaded it) and the wizard will walk you through installation.
 
 
-2. We are going to need to download pip, which is used to install libraries (allows different functionality for the
+**2.** We are going to need to download pip, which is used to install libraries (allows different functionality for the
 program). To do this, open Terminal (Mac/Linux) or PowerShell (Windows), and type:
         curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
 And hit enter. Once this is done, type:
@@ -25,26 +28,26 @@ And hit enter. Once this is done, type:
 And hit enter again.
 
 
-3. Now, using Terminal/PowerShell, type:
+**3.** Now, using Terminal/PowerShell, type:
         pip3 install openpyxl
 And hit enter. If you get an error saying something like 'pip3: command not found' then trying using pip instead of
 pip3.
 
 
-4. Next, download writer.py by clicking on the "Clone or Download" button on the "Code" page of the GitHub repository
+**4.** Next, download writer.py by clicking on the "Clone or Download" button on the "Code" page of the GitHub repository
 (this is found at github.com/adkrueger/System-Excel-Writer). Now, click "Download ZIP". You may need to extract the
 contents of this folder after done downloading (which can be done by either going into the folder and selecting the
 "Extract" option in the menu, or by right clicking and selecting the "Extract All" option).
 
 
-5. There are multiple ways to run the script, but we will use the easier of the two first:
-Open the 'writer.py' file. This contains all code, and should open up in a new window. Now click the 'Run' option in
+**5.** There are multiple ways to run the script, but we will use the easier of the two first:
+Open the 'writer.py' file by double-clicking on it. This contains all code, and should open up in a new window. Now click the 'Run' option in
 the menu bar at the top of the screen (if this doesn't appear, make sure you're on the correct window). In the dropdown
 menu that appears, click 'Run Module'.
 
 If the above instructions didn't work, follow the OS-specific instructions below.
 
-WINDOWS:
+**WINDOWS**:
 Open Notepad and type something like the following:
 @echo off
 "path where your python.exe is stored" "path where writer.py is stored"
@@ -61,15 +64,17 @@ You should be able to double click the .bat folder, which will open the Command 
 containing instructions on how to operate the program.
 
 
-MAC OS:
-Open Terminal and type something like the following:
+**MAC OS**:
+Open Terminal (i.e. Command+Spacebar, then type "Terminal" and click on the program) and type something like the following:
 python3 "path where writer.py is stored"
 i.e.
 python3 C:\Users\aakru\Downloads\System-Excel-Writer-master\System-Excel-Writer-master\writer.py
+*or*
+python3 ./writer.py                 <-- note that this only works if your terminal is in the same directory as writer.py
 This will run the program, where a window will pop up with instructions on how to run the program.
 
 
-LINUX:
+**LINUX**:
 Use terminal to navigate to the folder where writer.py is stored.
 Type "chmod u+x writer.py" to allow the program to execute.
 Type "./writer.py" and the program will run

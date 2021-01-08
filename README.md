@@ -1,4 +1,4 @@
-#SYSTEM EXCEL WRITER
+# SYSTEM EXCEL WRITER
 Author: Aaron Krueger
 Publication Date: 8/19/2019
 Update Date: 1/8/2021
@@ -10,9 +10,10 @@ this data in a clean and concise fashion onto another spreadsheet.
 
 
 
-#**USAGE**
 
-*Note*: skip steps 1-3 if you've already downloaded python, pip, and the openpyxl library. step 4 can be skipped if there 
+# **USAGE**
+
+**_Note_**: skip steps 1-3 if you've already downloaded python, pip, and the openpyxl library. step 4 can be skipped if there 
     are no updates to the program
 
 **1.** First step is to make sure you've downloaded Python 3.x. There are many versions of Python 3 to download, but this
@@ -46,7 +47,7 @@ Open the 'writer.py' file by double-clicking on it. This contains all code, and 
 the menu bar at the top of the screen (if this doesn't appear, make sure you're on the correct window). In the dropdown
 menu that appears, click 'Run Module'.
 
-If the above instructions didn't work, follow the OS-specific instructions below.
+If the above instructions didn't work, follow the OS-specific instructions below:
 
 **WINDOWS**:
 Using Command Prompt (type "cmd" in the search bar and click on Command Prompt), type in the following:
@@ -76,7 +77,12 @@ Type "./writer.py" and the program will run
 6. Follow the instructions given in the program to compile the spreadsheet.
 
 
-#NOTES:
+
+
+
+
+
+# NOTES:
 The initial spreadsheet should follow a certain "expected format"
     Column A should have dates in "MM/DD/YYYY" or similar format
     Column B should have individual days for each date (i.e. Monday, Tuesday, etc.)
@@ -97,7 +103,7 @@ The program will not save properly if "writebook" is already open on the compute
 
 
 
-#TROUBLESHOOTING:
+# TROUBLESHOOTING:
 I clicked the "X" button and the program stopped, what should I do?
     Run the program again and make sure you only use the "Exit" button given at the end of the program.
     (Exiting the program preemptively won't cause any harm, you'll just need to start all over)
